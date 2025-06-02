@@ -1,0 +1,9 @@
+{"dummy command" :
+    [{ "type" : "COMMAND" }, { "desc" : "placeholder command card"}],
+
+"dummy loop" :
+    [{"type" : "LOOP"}, {"desc" : "placeholder loop card"}],
+
+"dummy operator" :
+[{"type" : "OPERATOR"}, {"desc" : "placeholder operator card"}]
+}

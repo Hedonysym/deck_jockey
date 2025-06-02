@@ -9,3 +9,26 @@ fututre versions may allow players to interact wiyth eachother and disrupt their
 other decks to play around with.
 
 for now this game will only require python and bash, idk how this is gonna go fully yet.
+
+
+upon running main:
+- opens a prompt for player name and decklist
+- creates a deck object of the proper list and applys it to the player
+- runs the game
+
+the game:
+- each turn shows current production level and increments max resource
+- draws to fill handsize 5
+- activates any loops and decrements thir counts
+- lists hand and waits for input
+- after turn is passed checks to see if production is 10 or more, ends the game and displays final turn count or goes to next turn
+
+player actions:
+- show hand - lists hand
+- show {card} - displays card text of selected card
+- play {card} - plays card of appropriate action
+    - operator - prompts an applicable card
+    - loop - prompts an applicable card and appends itself and the card it loops to looper
+    - command - activates with any modifiers applied
+- trash {card} - discards a card without playing
+- quit
