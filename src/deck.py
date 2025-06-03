@@ -29,21 +29,13 @@ class Deck:
         for name in decklist:
             card_name = name.strip()
             if card_name in data:
-                card_type = data[card_name][0]['type']
-                card_desc = data[card_name][1]['desc']
-                card = Card(card_name, card_type, card_desc)
+                card_type = data[card_name]['type']
+                card_desc = data[card_name]['desc']
+                card_cost = data[card_name]['cost']
+                card = Card(card_name, card_type, card_desc, card_cost)
                 cards.append(card)
             else:
                 print(f"Warning: unknown card {card_name}")
 
         return cards
 
-
-
-
-class Trash:
-    def __init__(self):
-        self.trash = []
-
-    def add_to_trash(self, card):
-        self.trash.append(card)
