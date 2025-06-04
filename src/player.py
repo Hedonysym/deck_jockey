@@ -9,7 +9,6 @@ class Player:
         self.trash = []
         self.resources = 0
         self.production = 0
-        self.first_turn()
 
     def draw(self):
         self.hand.append(self.deck.draw())
