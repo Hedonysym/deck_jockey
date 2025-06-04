@@ -36,18 +36,33 @@ class Game:
     
     def decklist_select(self):
         repo_dir = os.path.join(os.path.dirname(__file__), "..")
-        decklist_dir = repo_dir + '/decklists/'
+        decklist_dir = os.path.join(repo_dir, 'decklists')
         for file in os.listdir(decklist_dir):
             print(file)
         deck_file_name = input("\n")
         if deck_file_name not in os.listdir(decklist_dir):
             raise ValueError("Decklist not found")
-        with open(decklist_dir + deck_file_name, 'r') as file:
+        with open(os.path.join(decklist_dir, deck_file_name), 'r') as file:
             deck = file.read()
         return deck
     
     def next_turn(self):
-        turn = TurnMan(self, self.turn_order.get())
+        
+        while True:
+            player = self.turn_order.get()
+            try:
+                player.turn_cycle()
+                break
+            except Exception as e:
+                print(f"{player.name} {e}")
+                if self.turn_order.qsize() == 0:
+                    quit()
+                elif self.turn_order.qsize() == 1:
+                    winner = self.turn_order.get()
+                    print(f"{winner.name} Wins!")
+                    print(f"Final Turn Count: {winner.turn_num}")
+                    quit()
+        turn = TurnMan(self, player)
         turn.cmdloop()
 
 
@@ -68,7 +83,8 @@ class TurnMan(cmd.Cmd):
                 case _:
                     for card in self.turn_player.hand:
                         if card.name == arg:
-                            card.show_card()
+                            card.show_card(True)
+                            return
                     print(f"{arg} not in hand")
         else:
             print("Show what?")
@@ -77,6 +93,7 @@ class TurnMan(cmd.Cmd):
         print(f"{self.turn_player.name} ends their turn")
         self.game.turn_order.put(self.turn_player)
         self.game.next_turn()
+        return
 
 
     def do_quit(self, arg):

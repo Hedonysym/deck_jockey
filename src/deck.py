@@ -12,6 +12,8 @@ class Deck:
         return self
 
     def draw(self):
+        if len(self.cards) == 0:
+            raise ValueError("Empty Deck! Game Over!")
         return self.cards.pop()
     
     def decklist_to_deck(self, decklist: list):

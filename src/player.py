@@ -7,17 +7,19 @@ class Player:
         self.deck = deck
         self.hand = []
         self.trash = []
+        self.max_resources = 0
         self.resources = 0
         self.production = 0
+        self.turn_num = 0
 
     def draw(self):
         self.hand.append(self.deck.draw())
 
-    def first_turn(self):
-        for i in range(5):
-            self.draw()
-        self.resources += 1
-        self.show_hand()
+
+    def show_trash(self):
+        print(f"{self.name}'s Trash: ")
+        for card in self.trash:
+            card.show_card()
 
 
     def show_hand(self, desc=False):
@@ -25,8 +27,14 @@ class Player:
         for card in self.hand:
             card.show_card(desc)
 
-    def turn_upkeep(self):
-        self.resources += 1
+    def turn_cycle(self):
+        if self.turn_num == 0:
+            for i in range(4):
+                self.draw()
+        self.max_resources += 1
+        self.resources = self.max_resources
         self.draw()
-        print(f"{self.name} has {self.production} production so far")
+        self.turn_num += 1
+        print(f"{self.name}: Turn {self.turn_num}")
+        print(f"{self.name} has {self.production} production and {self.resources} resources")
         self.show_hand()
