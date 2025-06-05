@@ -16,7 +16,7 @@ class Card:
         self.cost = cost
 
     def __repr__(self):
-        return f"Card({self.type}, {self.name}, {self.desc})"
+        return f"\nCard({self.type}, {self.name}, {self.desc})"
     
     def show_card(self, desc=False):
         match self.type:

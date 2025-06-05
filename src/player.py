@@ -36,5 +36,5 @@ class Player:
         self.draw()
         self.turn_num += 1
         print(f"{self.name}: Turn {self.turn_num}")
-        print(f"{self.name} has {self.production} production and {self.resources} resources")
+        print(f"{self.name} has {self.production} production and {self.max_resources} resources")
         self.show_hand()
