@@ -1,9 +1,64 @@
 {"dummy command" :
-    { "type" : "COMMAND", "desc" : "placeholder command card", "cost" : 1},
+{ "type" : "COMMAND", "cost" : 1,
+"desc" : "placeholder command card"},
 
 "dummy loop" :
-    {"type" : "LOOP", "desc" : "placeholder loop card", "cost" : 2},
+{"type" : "LOOP", "cost" : 2,
+"desc" : "placeholder loop card"},
 
 "dummy operator" :
-{"type" : "OPERATOR", "desc" : "placeholder operator card", "cost" : 3}
+{"type" : "OPERATOR", "cost" : 3, 
+"desc" : "placeholder operator card"},
+
+"while" : 
+{"type" : "LOOP", "cost" : 2,
+"desc" : "Play the looped command each turn until a break is played"},
+
+"for 3" : 
+{"type" : "LOOP", "cost" : 2,
+"desc" : "Play the looped card for 3 turns or until a break is played"},
+
+"for 2" : 
+{"type" : "LOOP", "cost" : 1,
+"desc" : "Play the looped card for 2 turns or until a break is played"},
+
+"++ increment" : 
+{"type" : "OPERATOR", "cost" : 0, 
+"desc" : "The next command played costs 1 more and its value increases by 1"},
+
+"-- decrement" : 
+{"type" : "OPERATOR", "cost" : 0, 
+"desc" : "The next command played costs 1 less and its value decresases by 1"},
+
+"&& and" : 
+{"type" : "OPERATOR", "cost" : 0, 
+"desc" : "Adds a second command to an existing loop"},
+
+"coffee break" : 
+{"type" : "COMMAND", "cost" : 1, 
+"desc" : "Breaks all loops, + 1 max resources for each broken loop (min 1)"},
+
+"lunch break" : 
+{"type" : "COMMAND", "cost" : 2, 
+"desc" : "Breaks all loops, draw 2 + 1 for each broken loop"},
+
+"recycle" : 
+{"type" : "COMMAND", "cost" : 2, 
+"desc" : "Adds 2 cards from your trash to your hand"},
+
+"zoom call" : 
+{"type" : "COMMAND", "cost" : 2, 
+"desc" : "Discard 2 cards, produce 2"},
+
+"hotfix" : 
+{"type" : "COMMAND", "cost" : 3, 
+"desc" : "Lose 1 production, draw 2 and reset your resources to max this turn"},
+
+"major update" : 
+{"type" : "COMMAND", "cost" : 4, 
+"desc" : "Produce 4"},
+
+"minor update" : 
+{"type" : "COMMAND", "cost" : 3, 
+"desc" : "Produce 3"}
 }

@@ -66,6 +66,11 @@ class Game:
         print(f"\n{player.name} Wins!")
         print(f"Final Turn Count: {player.turn_num}")
         quit()
+    
+    def end_chk(self, player):
+        if player.production >= 10:
+            print(f"\n{player.name} has reached the production goals!")
+            self.win(player)
 
 class TurnMan(cmd.Cmd):
     def __init__(self, current_game: Game, turn_player: Player):
@@ -98,6 +103,7 @@ class TurnMan(cmd.Cmd):
 
 
     def do_pass(self, arg):
+        self.game.end_chk(self.turn_player)
         print(f"\n{self.turn_player.name} ends their turn\n")
         self.game.turn_order.put(self.turn_player)
         self.game.next_turn()
@@ -123,5 +129,13 @@ class TurnMan(cmd.Cmd):
         "quit - turn player condeeds the game, if there is only one more player, they win")
 
 
+    def do_play(self, arg):
+        try:
+            self.turn_player.play_card(arg)
+        except Exception as e:
+            print(e)
     
+    def help_play(self):
+        print("\nusage: play <card name>\n" \
+        "play - play a card from your hand, provided you have enough resources")
 

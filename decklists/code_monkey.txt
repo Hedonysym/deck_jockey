@@ -1,0 +1,40 @@
+while
+while
+for 3
+for 3
+for 3
+for 3
+for 2
+for 2
+for 2
+for 2
+++ increment
+++ increment
+++ increment
+++ increment
+-- decrement
+-- decrement
+-- decrement
+-- decrement
+&& and
+&& and
+coffee break
+coffee break
+coffee break
+lunch break
+lunch break
+recycle
+recycle
+zoom call
+zoom call
+zoom call
+zoom call
+hotfix
+hotfix
+major update
+major update
+major update
+minor update
+minor update
+minor update
+minor update
