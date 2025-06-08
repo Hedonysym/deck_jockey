@@ -44,7 +44,14 @@ class Player:
     def looper(self):
         for loop in self.loops:
             if loop.value is None or loop.value > 0:
-                loop.loop_cards
+                for card in loop.cards:
+                    if card.type != "LOOP":
+                        print(f"{card.name}")
+                        card.play(self)
+                    else:
+                        print(f"{loop.name} {loop.value}")
+                if loop.value is not None:
+                    loop.value -= 1
             else:
                 self.loops.remove(loop)
     
@@ -56,40 +63,67 @@ class Player:
     def play_card(self, card_name: str):
         for card in self.hand:
             if card.name == card_name:
-                self.hand.remove(card)
-                match (card.type):
-                    case "COMMAND":
-                        card.play(self)
-                        self.trash.append(card)
-                    case "OPERATOR":
-                        card.play(self)
-                        self.trash.append(card)
-                    case "LOOP":
-                        card.play(self, card)
-                    case _:
-                        raise Exception("Invalid card type")
-                print(f"\n{self.resources}/{self.max_resources} remaining")
-                return
-        raise Exception(f"\n{card_name} not in hand!")
+                if self.cost_chk(card.cost) == True:
+                    self.hand.remove(card)
+                    match (card.type):
+                        case "COMMAND":
+                            card.play(self)
+                            self.trash.append(card)
+                        case "OPERATOR":
+                            card.play(self)
+                            self.trash.append(card)
+                        case "LOOP":
+                            card.play(self, card)
+                        case _:
+                            print("\nInvalid card type")
+                    print(f"\n{self.resources}/{self.max_resources} remaining")
+                    return
+                else:
+                    return
+        print(f"\n{card_name} not in hand!")
     
     
-    def create_loop(self, name, card, value=None):
+    def create_loop(self, name, loopcard, value=None):
         while True:
-            looped_card = input("\nWhat card would you like to loop?\n")
-            if looped_card.type is not "COMMAND":
-                print("\nNot a command!")
-                continue
-            loop = Loop(name, card, value)
-            loop.cards.append(looped_card)
-            self.loops.append(loop)
-            break
+            card_name = input("\nPick a command card\n")
+            for card in self.hand:
+                if card.name == card_name:
+                    if card.type != "COMMAND":
+                        print("\nNot a command card!")
+                        continue
+                    else: 
+                        loop = Loop(name, loopcard, value)
+                        loop.cards.append(card)
+                        self.loops.append(loop)
+                        return
+
 
 
     def cost_chk(self, value):
         if value > self.resources:
-            raise Exception("\nInsufficient resources!")
-        self.resources -= value
+            print("\nInsufficient resources!")
+            return False
+        return True
+    
+    def recycle(self, value):
+        for i in range(value):
+            card_name = input("\nWhat card do you want to recycle?\n")
+            for card in self.trash:
+                if card.name == card_name:
+                    self.trash.remove(card)
+                    self.hand.append(card)
+                    return
+                else:
+                    print("Card not in trash!")
 
+    def discard(self, value):
+        for i in range(value):
+            card_name = input("\nWhat card do you want to discard?\n")
+            for card in self.hand:
+                if card.name == card_name:
+                    self.hand.remove(card)
+                    self.trash.append(card)
+                    return
 
 
 
@@ -102,7 +136,7 @@ class Loop:
 
     def loop_cards(self):
         for card in self.cards:
-            if card.type is not "Loop":
+            if card.type != "Loop":
                 try:
                     print(f"{card.name}")
                     card.play(self, )

@@ -1,25 +1,64 @@
 from enum import Enum
 import colorama
 
-def _while(player, card):
-    pass
+def _while(card, player, none):
+    player.resources -= card.cost
+    player.create_loop("while", card, None)
 
-def _for_3(player, card):
-    pass
+def _for_3(card, player, none):
+    player.resources -= card.cost
+    player.create_loop("for", card, 3)
 
-def _for_2(player, card):
-    pass
+def _for_2(card, player, none):
+    player.resources -= card.cost
+    player.create_loop("for", card, 2)
 
-def _increment(player):
-    pass
+def _increment(card, player, none):
+    while True:
+        card_name = input("\nPick a command card\n")
+        for card in player.hand:
+            if card.name == card_name:
+                if card.type != "COMMAND":
+                    print("\nNot a command card!")
+                else:
+                    card.play("increment")
+                    break
+            
 
-def _decrement(player):
-    pass
+def _decrement(card, player, none):
+    while True:
+            card_name = input("\nPick a command card\n")
+            for card in player.hand:
+                if card.name == card_name:
+                    if card.type != "COMMAND":
+                        print("\nNot a command card!")
+                    else:
+                        card.play("decrement")
+                        break
 
-def _and(player):
-    pass
+def _and(card, player, arg=None):
+    while True:
+        if len(player.loops) == 0:
+            print("\nNo loops")
+            return
+        loop_name = input("\nChoose an active loop!\n")
+        for loop in player.loops:
+            if loop_name == loop.name:
+                while True:
+                    card_name = input("\nPick a command card\n")
+                    for card in player.hand:
+                        if card.name == card_name:
+                            if card.type != "COMMAND":
+                                print("\nNot a command card!")
+                            else:
+                                loop.cards.append(card)
+                                break
+                
+            else:
+                print("\nNot valid")
 
-def _coffee_break(player, arg=None):
+
+def _coffee_break(card, player, arg=None):
     cost, value = 1, 1
     if arg == "increment":
         cost += 1 
@@ -27,70 +66,85 @@ def _coffee_break(player, arg=None):
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
     loops = len(player.loops)
     player.break_all()
     player.max_resources += value + loops
 
-def _lunch_break(player, arg=None):
-    cost, value = 1, 1
+def _lunch_break(card, player, arg=None):
+    cost, value = 2, 2
     if arg == "increment":
         cost += 1 
         value += 1
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
+    loops = len(player.loops)
+    player.break_all()
+    for i in range(loops + value):
+        player.draw()
 
-def _recycle(player, arg=None):
-    cost, value = 1, 1
+def _recycle(card, player, arg=None):
+    cost, value = 2, 2
     if arg == "increment":
         cost += 1 
         value += 1
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
+    player.recycle(value)
 
-def _zoom_call(player, arg=None):
-    cost, value = 1, 1
+def _zoom_call(card, player, arg=None):
+    cost, value = 2, 2
     if arg == "increment":
         cost += 1 
         value += 1
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
+    player.discard(1)
+    player.production += value
 
-def _hotfix(player, arg=None):
-    cost, value = 1, 1
+def _hotfix(card, player, arg=None):
+    cost, value = 3, 2
     if arg == "increment":
         cost += 1 
         value += 1
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
+    player.production -= 1
+    for i in range(value):
+        player.draw()
+    player.resources = player.max_resourses
 
-def _major_update(player, arg=None):
-    cost, value = 1, 1
-    if arg == "increment":
-        cost += 1 
-        value += 1
-    if arg == "decrement":
-        cost -= 1
-        value -= 1
-    player.cost_chk(cost)
 
-def _minor_update(player, arg=None):
-    cost, value = 1, 1
+def _major_update(card, player, arg=None):
+    cost, value = 4, 4
     if arg == "increment":
         cost += 1 
         value += 1
     if arg == "decrement":
         cost -= 1
         value -= 1
-    player.cost_chk(cost)
+    player.resources -= cost
+    player.production += value
+
+
+def _minor_update(card, player, arg=None):
+    cost, value = 3, 3
+    if arg == "increment":
+        cost += 1 
+        value += 1
+    if arg == "decrement":
+        cost -= 1
+        value -= 1
+    player.resources -= cost
+    player.production += value
 
 card_actions = {
     "while" : _while,
@@ -138,6 +192,6 @@ class Card:
     def play(self, player, args=None):
         action = card_actions.get(self.name)
         if action:
-            action(player, args)
+            action(self, player, args)
         else:
             print(f"Unimplemented card: {self.name}")

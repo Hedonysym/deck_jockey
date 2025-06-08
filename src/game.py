@@ -71,6 +71,7 @@ class Game:
         if player.production >= 10:
             print(f"\n{player.name} has reached the production goals!")
             self.win(player)
+    
 
 class TurnMan(cmd.Cmd):
     def __init__(self, current_game: Game, turn_player: Player):
@@ -133,7 +134,13 @@ class TurnMan(cmd.Cmd):
         try:
             self.turn_player.play_card(arg)
         except Exception as e:
-            print(e)
+            print(f"{self.turn_player.name} {e}")
+            if self.game.turn_order.qsize() == 0:
+                    quit()
+            elif self.game.turn_order.qsize() == 1:
+                    self.game.win(self.game.turn_order.get())
+            self.game.next_turn()
+            return True
     
     def help_play(self):
         print("\nusage: play <card name>\n" \
